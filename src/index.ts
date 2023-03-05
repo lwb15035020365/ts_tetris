@@ -1,28 +1,43 @@
-import { Square } from "./core/Square";
+import { SquareGroup } from "./core/SquareGroup";
 import { SquarePageViewer } from "./core/viewer/SquarePageViewer";
 import $ from "jquery"
 
-const sq = new Square();
-sq.viewer = new SquarePageViewer(sq, $("#root"));
-sq.color = "red";
-sq.point = {
-  x: 3,
-  y: 0
-}
+const group = new SquareGroup([
+  { x: 0, y: -1 }, { x: -1, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 1 }
+], { x: 3, y: 2 }, 'red');
+
+group.squares.forEach(sq => {
+  sq.viewer = new SquarePageViewer(sq, $('#root'));
+})
 
 $("#btnDown").click(function () {
-  sq.point = {
-    x: sq.point.x,
-    y: sq.point.y + 1
+  //更改中心点坐标
+  group.centerPoint = {
+    x: group.centerPoint.x,
+    y: group.centerPoint.y + 1
   }
 })
 
-$("#btnRemove").click(function () {
-  if (sq.viewer) {
-    sq.viewer.remove();
+$("#btnUp").click(function () {
+  //更改中心点坐标
+  group.centerPoint = {
+    x: group.centerPoint.x,
+    y: group.centerPoint.y - 1
   }
 })
 
-$("#btnAdd").click(function () {
-  sq.viewer = new SquarePageViewer(sq, $("#root"));
+$("#btnLeft").click(function () {
+  //更改中心点坐标
+  group.centerPoint = {
+    x: group.centerPoint.x - 1,
+    y: group.centerPoint.y
+  }
+})
+
+$("#btnRight").click(function () {
+  //更改中心点坐标
+  group.centerPoint = {
+    x: group.centerPoint.x + 1,
+    y: group.centerPoint.y
+  }
 })
