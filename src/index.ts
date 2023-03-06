@@ -1,7 +1,9 @@
 import { SquareGroup } from "./core/SquareGroup";
 import { createTeris } from "./core/Teris";
+import { TerisRule } from "./core/TerisRule";
+import { MoveDirection } from "./core/types";
 import { SquarePageViewer } from "./core/viewer/SquarePageViewer";
-import $ from "jquery"
+import $ from "jquery";
 
 const teris = createTeris({ x: 3, y: 2 });
 teris.squares.forEach(sq => {
@@ -10,32 +12,23 @@ teris.squares.forEach(sq => {
 
 $("#btnDown").click(function () {
   //更改中心点坐标
-  teris.centerPoint = {
-    x: teris.centerPoint.x,
-    y: teris.centerPoint.y + 1
-  }
+  TerisRule.move(teris, MoveDirection.down);
 })
 
 $("#btnUp").click(function () {
   //更改中心点坐标
-  teris.centerPoint = {
+  TerisRule.move(teris, {
     x: teris.centerPoint.x,
     y: teris.centerPoint.y - 1
-  }
+  });
 })
 
 $("#btnLeft").click(function () {
   //更改中心点坐标
-  teris.centerPoint = {
-    x: teris.centerPoint.x - 1,
-    y: teris.centerPoint.y
-  }
+  TerisRule.move(teris, MoveDirection.left);
 })
 
 $("#btnRight").click(function () {
   //更改中心点坐标
-  teris.centerPoint = {
-    x: teris.centerPoint.x + 1,
-    y: teris.centerPoint.y
-  }
+  TerisRule.move(teris, MoveDirection.right);
 })
