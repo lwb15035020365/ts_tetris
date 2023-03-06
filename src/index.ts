@@ -1,43 +1,41 @@
 import { SquareGroup } from "./core/SquareGroup";
+import { createTeris } from "./core/Teris";
 import { SquarePageViewer } from "./core/viewer/SquarePageViewer";
 import $ from "jquery"
 
-const group = new SquareGroup([
-  { x: 0, y: -1 }, { x: -1, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 1 }
-], { x: 3, y: 2 }, 'red');
-
-group.squares.forEach(sq => {
+const teris = createTeris({ x: 3, y: 2 });
+teris.squares.forEach(sq => {
   sq.viewer = new SquarePageViewer(sq, $('#root'));
 })
 
 $("#btnDown").click(function () {
   //更改中心点坐标
-  group.centerPoint = {
-    x: group.centerPoint.x,
-    y: group.centerPoint.y + 1
+  teris.centerPoint = {
+    x: teris.centerPoint.x,
+    y: teris.centerPoint.y + 1
   }
 })
 
 $("#btnUp").click(function () {
   //更改中心点坐标
-  group.centerPoint = {
-    x: group.centerPoint.x,
-    y: group.centerPoint.y - 1
+  teris.centerPoint = {
+    x: teris.centerPoint.x,
+    y: teris.centerPoint.y - 1
   }
 })
 
 $("#btnLeft").click(function () {
   //更改中心点坐标
-  group.centerPoint = {
-    x: group.centerPoint.x - 1,
-    y: group.centerPoint.y
+  teris.centerPoint = {
+    x: teris.centerPoint.x - 1,
+    y: teris.centerPoint.y
   }
 })
 
 $("#btnRight").click(function () {
   //更改中心点坐标
-  group.centerPoint = {
-    x: group.centerPoint.x + 1,
-    y: group.centerPoint.y
+  teris.centerPoint = {
+    x: teris.centerPoint.x + 1,
+    y: teris.centerPoint.y
   }
 })
