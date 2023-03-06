@@ -19,6 +19,11 @@ export class SquareGroup {
 
   public set centerPoint(v: Point) {
     this._centerPoint = v;
+    this.setSquarePoints();
+  }
+
+  // 根据中心点坐标，以及形状，设置每一个小方块的坐标
+  private setSquarePoints() {
     this._shape.forEach((p, i) => {
       this._squares[i].point = {
         x: this._centerPoint.x + p.x,
@@ -43,5 +48,33 @@ export class SquareGroup {
       arr.push(sq);
     })
     this._squares = arr;
+  }
+
+  protected isClock = true;
+
+  afterRotateShape(): Shape {
+    if (this.isClock) {
+      return this._shape.map(p => {
+        const newP: Point = {
+          x: -p.y,
+          y: p.x
+        }
+        return newP;
+      })
+    } else {
+      return this._shape.map(p => {
+        const newP: Point = {
+          x: p.y,
+          y: -p.x
+        }
+        return newP;
+      })
+    }
+  }
+
+  rotate() {
+    const newShape = this.afterRotateShape();
+    this._shape = newShape;
+    this.setSquarePoints();
   }
 }
