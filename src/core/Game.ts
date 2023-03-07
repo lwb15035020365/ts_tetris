@@ -3,6 +3,7 @@ import { SquareGroup } from "./SquareGroup";
 import { createTeris } from "./Teris";
 import { TerisRule } from "./TerisRule";
 import GameConfig from "./GameConfig";
+import { Square } from "./Square";
 
 export class Game {
   //游戏状态
@@ -15,6 +16,9 @@ export class Game {
   private _timer?: any;
   //自动下落的间隔时间
   private _duration: number = 1000;
+
+  //当前游戏中，已存在的方块
+  private _exists: Square[] = [];
 
   constructor(private _viewer: GameViewer) {
     this.resetCenterPoint(GameConfig.nextSize.width, this._nextTeris);
@@ -50,25 +54,26 @@ export class Game {
 
   controlLeft() {
     if (this._curTeris && this._gameStatus === GameStatus.playing) {
-      TerisRule.move(this._curTeris, MoveDirection.left);
+      TerisRule.move(this._curTeris, MoveDirection.left, this._exists);
     }
   }
 
   controlRight() {
     if (this._curTeris && this._gameStatus === GameStatus.playing) {
-      TerisRule.move(this._curTeris, MoveDirection.right);
+      TerisRule.move(this._curTeris, MoveDirection.right, this._exists);
     }
   }
 
   controlDown() {
     if (this._curTeris && this._gameStatus === GameStatus.playing) {
-      TerisRule.moveDirectly(this._curTeris, MoveDirection.down);
+      TerisRule.moveDirectly(this._curTeris, MoveDirection.down, this._exists);
+      this.hitBottom();
     }
   }
 
   controlRotate() {
     if (this._curTeris && this._gameStatus === GameStatus.playing) {
-      TerisRule.rotate(this._curTeris);
+      TerisRule.rotate(this._curTeris, this._exists);
     }
   }
 
@@ -81,7 +86,9 @@ export class Game {
     }
     this._timer = setInterval(() => {
       if (this._curTeris) {
-        TerisRule.move(this._curTeris, MoveDirection.down);
+        if (!TerisRule.move(this._curTeris, MoveDirection.down, this._exists)) {
+          this.hitBottom();
+        }
       }
     }, this._duration);
   }
@@ -113,5 +120,16 @@ export class Game {
         y: sq.point.y + 1
       })
     }
+  }
+
+
+  /*
+  *触底之后的操作
+  */
+  private hitBottom() {
+    //将当前的俄罗斯方块包含的方块，加入到已存在的方块数组中
+    this._exists = this._exists.concat(this._curTeris!.squares);
+    //切换方块
+    this.switchTeris();
   }
 }
